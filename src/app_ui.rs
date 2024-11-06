@@ -62,129 +62,6 @@ live_design!{
     COLOR_UP_5 = #xFFFFFF66
     COLOR_UP_6 = #xFFFFFFCC
     COLOR_UP_FULL = #xFFFFFFFF
-    BarButton = <Button dx:279.6 dy:-136.8 dw:400.0 dh:300.0> {
-        padding: {top: 5.0, right: 7.5, bottom: 5.0, left: 7.5}
-        margin: {top: 5.0, right: 5.0, bottom: 5.0, left: 5.0}
-        text: "Cancel"
-        draw_text: {
-            text_style: <TEXT_BOLD> {},
-        }
-        draw_bg: {
-            instance hover: 0.0
-            instance pressed: 0.0
-            uniform border_radius: 3.0
-            
-            fn pixel(self) -> vec4 {
-                let sdf = Sdf2d::viewport(self.pos * self.rect_size);
-                let grad_top = 5.0;
-                let grad_bot = 1.0;
-                let body = mix(mix(#53, #5c, self.hover), #33, self.pressed);
-                let body_transp = vec4(body.xyz, 0.0);
-                let top_gradient = mix(body_transp, mix(#6d, #1f, self.pressed), max(0.0, grad_top - sdf.pos.y) / grad_top);
-                let bot_gradient = mix(
-                    mix(body_transp, #5c, self.pressed),
-                    top_gradient,
-                    clamp((self.rect_size.y - grad_bot - sdf.pos.y - 1.0) / grad_bot, 0.0, 1.0)
-                );
-                
-                // the little drop shadow at the bottom
-                let shift_inward = self.border_radius + 4.0;
-                sdf.move_to(shift_inward, self.rect_size.y - self.border_radius);
-                sdf.line_to(self.rect_size.x - shift_inward, self.rect_size.y - self.border_radius);
-                sdf.stroke(
-                    mix(mix(#0006, #1f, self.hover), #0000, self.pressed),
-                    self.border_radius
-                )
-                
-                sdf.box(
-                    1.,
-                    1.,
-                    self.rect_size.x - 2.0,
-                    self.rect_size.y - 2.0,
-                    self.border_radius
-                )
-                sdf.fill_keep(body)
-                
-                sdf.stroke(
-                    bot_gradient,
-                    1.0
-                )
-                
-                return sdf.result
-            }
-        }
-    }
-    
-    FishSlider = <Slider> {
-        height: 36
-        text: "CutOff1"
-        draw_text: {text_style: <H2_TEXT_BOLD> {}, color: (COLOR_UP_5)}
-        text_input: {
-            // cursor_margin_bottom: (SSPACING_1),
-            // cursor_margin_top: (SSPACING_1),
-            // select_pad_edges: (SSPACING_1),
-            // cursor_size: (SSPACING_1),
-            empty_message: "0",
-            is_numeric_only: true,
-            draw_bg: {
-                color: (COLOR_DOWN_0)
-            },
-        }
-        draw_slider: {
-            instance line_color: #8
-            instance bipolar: 0.0
-            fn pixel(self) -> vec4 {
-                let nub_size = 3
-                
-                let sdf = Sdf2d::viewport(self.pos * self.rect_size)
-                let top = 20.0;
-                
-                sdf.box(1.0, top, self.rect_size.x - 2, self.rect_size.y - top - 2, 1);
-                sdf.fill_keep(
-                    mix(
-                        mix((COLOR_DOWN_4), (COLOR_DOWN_4) * 0.1, pow(self.pos.y, 1.0)),
-                        mix((COLOR_DOWN_4) * 1.75, (COLOR_DOWN_4) * 0.1, pow(self.pos.y, 1.0)),
-                        self.drag
-                    )
-                ) // Control backdrop gradient
-                
-                sdf.stroke(mix(mix(#x00000060, #x00000070, self.drag), #xFFFFFF10, pow(self.pos.y, 10.0)), 1.0) // Control outline
-                let in_side = 5.0;
-                let in_top = 5.0; // Ridge: vertical position
-                sdf.rect(1.0 + in_side, top + in_top, self.rect_size.x - 2 - 2 * in_side, 3);
-                sdf.fill(mix((COLOR_DOWN_4), #00000088, self.drag)); // Ridge color
-                let in_top = 7.0;
-                sdf.rect(1.0 + in_side, top + in_top, self.rect_size.x - 2 - 2 * in_side, 3);
-                sdf.fill(#FFFFFF18); // Ridge: Rim light catcher
-                
-                let nub_x = self.slide_pos * (self.rect_size.x - nub_size - in_side * 2 - 9);
-                sdf.move_to(mix(in_side + 3.5, self.rect_size.x * 0.5, self.bipolar), top + in_top);
-                
-                sdf.line_to(nub_x + in_side + nub_size * 0.5, top + in_top);
-                sdf.stroke_keep(mix((COLOR_UP_0), self.line_color, self.drag), 1.5)
-                sdf.stroke(
-                    mix(mix(self.line_color * 0.85, self.line_color, self.hover), #xFFFFFF80, self.drag),
-                    1
-                )
-                
-                let nub_x = self.slide_pos * (self.rect_size.x - nub_size - in_side * 2 - 3) - 3;
-                sdf.box(nub_x + in_side, top + 1.0, 12, 12, 1.)
-                
-                sdf.fill_keep(mix(mix(#x7, #x8, self.hover), #3, self.pos.y)); // Nub background gradient
-                sdf.stroke(
-                    mix(
-                        mix(#xa, #xC, self.hover),
-                        #0,
-                        pow(self.pos.y, 1.5)
-                    ),
-                    1.
-                ); // Nub outline gradient
-                
-                
-                return sdf.result
-            }
-        }
-    }
     PromptGroup = <RectView> {
         <DividerV> {}
         height: Fit,
@@ -351,46 +228,18 @@ live_design!{
             root = Splitter {
                 axis: Horizontal,
                 align: FromA(300.0),
-                a: chat_record,
-                b: split1
-            }
-                                    
-            split1 = Splitter {
-                axis: Vertical,
-                align: FromB(400.0),
-                a: image_view,
-                b: input_panel
-            }
-                                    
-            chat_record = Tab {
+                a: sidebar,
+                b: main,
+            }                       
+            sidebar = Tab {
                 name: ""
-                kind:  ChatRecord
+                kind:  Sidebar
             }
-                                    
-            input_panel = Tab {
+            main= Tab {
                 name: ""
                 kind: InputPanel
             }
-                                    
-            image_view = Tab {
-                name: ""
-                kind: ImageView
-            }
-                                    
-            ImageView = <RectView> {
-                draw_bg: {color: #2}
-                height: Fill,
-                width: Fill
-                flow: Down,
-                align: {x: 0.5, y: 0.5}
-                cursor: Hand,
-                image = <ImageBlend> {
-                    fit: Smallest,
-                    width: Fill,
-                    height: Fill
-                }
-            }
-                                    
+                                                  
             InputPanel = <RectView> {
                 height: Fill,
                 width: Fill
@@ -476,7 +325,7 @@ live_design!{
                 }
             }
                                     
-            ChatRecord = <RectView> {
+            Sidebar = <RectView> {
                 draw_bg: {color: (COLOR_PANEL_BG)}
                 height: Fill,
                 width: Fill
@@ -486,7 +335,24 @@ live_design!{
                     width: Fill
                     flow: Right,
                     padding: {left: 10, right: 10, top: 10, bottom: 10},
+                    new_chat = <Button> {
+                        height: Fit,
+                        width: Fit,
+                        margin: {bottom: 0}
+                        text: "New Chat"
+                        draw_bg: {color: (COLOR_BUTTON)}
+                        draw_text: {text_style: {font_size: (TEXT_BIG)}}
+                    }
+                    search_button= <Button> {
+                        height: Fit,
+                        width: Fit,
+                        margin: {bottom: 0}
+                        text: "Search"
+                        draw_bg: {color: (COLOR_BUTTON)}
+                        draw_text: {text_style: {font_size: (TEXT_BIG)}}
+                    }
                     search = <TextInput> {
+                        visible: false,
                         height: Fit,
                         width: Fill,
                         margin: {bottom: 0}
@@ -515,62 +381,7 @@ live_design!{
                         }
                     }
                 }
-                image_list = <PortalList> {
-                    height: Fill,
-                    width: Fill,
-                    margin: {top: 0}
-                    flow: Down,
-                    padding: {top: 0, right: 10.0, bottom: 10.0, left: 10.0}
-                                                    
-                    PromptGroup = <PromptGroup> {}
-                                                    
-                    Empty = <View> {}
-                                                    
-                    ImageRow1 = <View> {
-                        height: Fit,
-                        width: Fill,
-                        margin: {bottom: 10}
-                        spacing: 20,
-                        flow: Right
-                        row1 = <ImageTile> {}
-                    }
-                }
-                <RoundedView>{
-                    draw_bg:{
-                        color:#2
-                    }
-                    margin:{top:0, left:10, right: 10, bottom:10}
-                    align: {x:0.5},
-                    padding: 2
-                    width: Fill,
-                    height: 164
-                    <View>{  
-                        width: Fit,
-                        height: Fit,
-                        margin: {top: 0},
-                        video_input0 = <VideoFrame>{}
-                        video_input1 = <VideoFrame>{}
-                    }
-                }
-                
             }
         }
-                            
-        big_image = <RectView> {
-            visible: false,
-            draw_bg: {draw_depth: 10.0}
-            draw_bg: {color: #0}
-            height: All,
-            width: All,
-            abs_pos: vec2(0.0, 0.0)
-            flow: Overlay,
-            align: {x: 0.5, y: 0.5}
-            image1 = <ImageBlend> {
-                draw_bg: {draw_depth: 11.0}
-                fit: Smallest,
-                width: Fill,
-                height: Fill
-            }
-        }
-    }
+    }            
 }
