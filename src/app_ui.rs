@@ -22,7 +22,7 @@ live_design!{
     SPACING_2 = {top: (SSPACING_2), right: (SSPACING_2), bottom: (SSPACING_2), left: (SSPACING_2)}
     SPACING_3 = {top: (SSPACING_3), right: (SSPACING_3), bottom: (SSPACING_3), left: (SSPACING_3)}
     SPACING_4 = {top: (SSPACING_4), right: (SSPACING_4), bottom: (SSPACING_4), left: (SSPACING_4)}
-    
+    // 记得加载中文字体文件，否则中文会出现乱码
     H2_TEXT_BOLD = {
         font_size: (FONT_SIZE_H2),
         font: {path: dep("crate://makepad-widgets/resources/IBMPlexSans-SemiBold.ttf")}
@@ -62,87 +62,6 @@ live_design!{
     COLOR_UP_5 = #xFFFFFF66
     COLOR_UP_6 = #xFFFFFFCC
     COLOR_UP_FULL = #xFFFFFFFF
-    
-    SdxlDropDown = <DropDown> {
-        width: Fit
-        padding: {top: (SSPACING_2), right: (SSPACING_4), bottom: (SSPACING_2), left: (SSPACING_2)}
-        
-        draw_text: {
-            text_style: <H2_TEXT_REGULAR> {},
-            fn get_color(self) -> vec4 {
-                return mix(
-                    mix(
-                        mix(
-                            (#xFFF8),
-                            (#xFFF8),
-                            self.focus
-                        ),
-                        (#xFFFF),
-                        self.hover
-                    ),
-                    (#x000A),
-                    self.pressed
-                )
-            }
-        }
-        
-        popup_menu: {
-            menu_item: {
-                indent_width: 10.0
-                width: Fill,
-                height: Fit
-                
-                
-                padding: {left: (SSPACING_4), top: (SSPACING_2), bottom: (SSPACING_2), right: (SSPACING_4)}
-                
-                draw_bg: {
-                    color: #x48,
-                    color_selected: #x6
-                }
-            }
-        }
-        
-        draw_bg: {
-            fn pixel(self) -> vec4 {
-                let sdf = Sdf2d::viewport(self.pos * self.rect_size);
-                self.get_bg(sdf);
-                // triangle
-                let c = vec2(self.rect_size.x - 10.0, self.rect_size.y * 0.5)
-                let sz = 2.5;
-                
-                sdf.move_to(c.x - sz, c.y - sz);
-                sdf.line_to(c.x + sz, c.y - sz);
-                sdf.line_to(c.x, c.y + sz * 0.75);
-                sdf.close_path();
-                
-                sdf.fill(mix(#FFFA, #FFFF, self.hover));
-                
-                return sdf.result
-            }
-            
-            fn get_bg(self, inout sdf: Sdf2d) {
-                sdf.rect(
-                    0,
-                    0,
-                    self.rect_size.x,
-                    self.rect_size.y
-                )
-                sdf.fill((COLOR_UP_0))
-            }
-        }
-    }
-    
-    BarLabel = <Label dx:-103.6 dy:393.8 dw:400.0 dh:300.0> {
-        margin: {left: 10},
-        text: "Workflow",
-        draw_text: {
-            text_style: <TEXT_BOLD> {},
-            fn get_color(self) -> vec4 {
-                return (COLOR_LABEL)
-            }
-        }
-    }
-    
     BarButton = <Button dx:279.6 dy:-136.8 dw:400.0 dh:300.0> {
         padding: {top: 5.0, right: 7.5, bottom: 5.0, left: 7.5}
         margin: {top: 5.0, right: 5.0, bottom: 5.0, left: 5.0}
@@ -193,24 +112,6 @@ live_design!{
                 
                 return sdf.result
             }
-        }
-    }
-    
-    SettingsInput = <View> {
-        width: 150,
-        height: Fit,
-        margin: {top: 10},
-        label = <BarLabel> {
-            width: Fit,
-            margin: {left: 5},
-            align: {x: 1.0}
-        }
-        input = <TextInput> {
-            padding: 0
-            height: Fit,
-            width: 50,
-            margin: {top: 1, left: 2}
-            text: "1344"
         }
     }
     
@@ -284,176 +185,6 @@ live_design!{
             }
         }
     }
-    
-    SettingsSlider = <View dx:210.7 dy:304.6 dw:400.0 dh:300.0> {
-        width: 130,
-        height: Fit,
-        margin: {top: 0},
-       /* label = <BarLabel> {
-            width: Fit,
-            margin: {left: 5},
-            align: {x: 1.0}
-        }*/
-        input = <FishSlider> {
-            padding: 0
-            height: 37,
-            width: 125,
-            margin: {top: 1, left: 2}
-            text: "HELLO WOLD"
-        }
-    }
-    
-    FillerH = <View dx:303.1 dy:271.4 dw:400.0 dh:300.0> {
-        width: Fill,
-        height: Fit
-    }
-    
-    FillerV = <View> {
-        width: Fit,
-        height: Fill
-    }
-    
-    
-    DividerV = <View dx:-313.3 dy:119.9 dw:400.0 dh:300.0> {
-        flow: Down,
-        spacing: 0.0
-        margin: {top: 0.0, right: 0.0, bottom: 10.0, left: 0.0}
-        width: Fill,
-        height: Fit
-            <RectView> {
-            height: 2,
-            width: Fill,
-            margin: 0.0
-            flow: Down,
-            padding: 0.0
-            draw_bg: {color: #x00000033}
-        }
-        <RectView> {
-            height: 2,
-            width: Fill,
-            margin: 0.0
-            flow: Down,
-            padding: 0.0
-            draw_bg: {color: #xFFFFFF18}
-        }
-    }
-    
-    DividerH = <View> {
-        flow: Right,
-        spacing: 0.0
-        margin: {top: 0.0, right: 5.0, bottom: 0.0, left: 5.0}
-        width: Fit,
-        height: Fill
-            <RectView> {
-            height: Fill,
-            width: 2,
-            margin: 0.0
-            flow: Down,
-            padding: 0.0
-            draw_bg: {color: #x00000033}
-        }
-        <RectView> {
-            height: Fill,
-            width: 2,
-            margin: 0.0
-            flow: Down,
-            padding: 0.0
-            draw_bg: {color: #xFFFFFF18}
-        }
-    }
-    
-    SdxlCheckBox = <CheckBox> {
-        padding: {top: (SSPACING_0), right: 0, bottom: (SSPACING_0), left: 23}
-        label_walk: {margin: {left: 20.0, top: 8, bottom: 8, right: 10}}
-        animator: {
-            selected = {
-                default: off
-                off = {
-                    from: {all: Forward {duration: 0.1}}
-                    apply: {draw_check: {selected: 0.0}}
-                }
-                on = {
-                    cursor: Arrow,
-                    from: {all: Forward {duration: 0.1}}
-                    apply: {draw_check: {selected: 1.0}}
-                }
-            }
-        }
-        draw_check: {
-            instance border_width: 1.0
-            instance border_color: #x06
-            instance border_color2: #xFFFFFF0A
-            size: 8.5;
-            fn pixel(self) -> vec4 {
-                let sdf = Sdf2d::viewport(self.pos * self.rect_size)
-                let sz = self.size;
-                let left = sz + 1.;
-                let c = vec2(left + sz, self.rect_size.y * 0.5);
-                sdf.box(left, c.y - sz, sz * 3.0, sz * 2.0, 0.5 * sz);
-                
-                sdf.stroke_keep(#xFFF2, 1.25)
-                
-                sdf.fill(#xFFF0)
-                let isz = sz * 0.65;
-                sdf.circle(left + sz + self.selected * sz, c.y - 0.5, isz);
-                sdf.circle(left + sz + self.selected * sz, c.y - 0.5, 0.425 * isz);
-                sdf.subtract();
-                sdf.circle(left + sz + self.selected * sz, c.y - 0.5, isz);
-                sdf.blend(self.selected)
-                sdf.fill(#xFFF8);
-                return sdf.result
-            }
-        }
-        draw_text: {
-            text_style: <TEXT_BOLD> {},
-            fn get_color(self) -> vec4 {
-                return (COLOR_LABEL)
-            }
-        }
-        text: "Slideshow"
-    }
-    
-    ProgressCircle = <View dx:-194.2 dy:-240.4 dw:400.0 dh:300.0> {
-        show_bg: true,
-        width: 24,
-        height: 24
-        draw_bg: {
-            instance progress: 0.0
-            instance active: 0.0
-            
-            fn circle_pie(inout sdf: Sdf2d, x: float, y: float, r: float, s: float) {
-                let c = sdf.pos - vec2(x, y);
-                let len = sqrt(c.x * c.x + c.y * c.y) - r;
-                let pi = 3.141592653589793;
-                let ang = (pi - atan(c.x, c.y)) / (2.0 * pi);
-                let ces = s * 0.5;
-                let ang2 = clamp((abs(ang - ces) - ces) * -r * r * sdf.scale_factor, 0.0, 1.0);
-                sdf.dist = len * ang2 / sdf.scale_factor;
-                sdf.old_shape = sdf.shape;
-                sdf.shape = min(sdf.shape, sdf.dist);
-            }
-            
-            fn pixel(self) -> vec4 {
-                let sdf = Sdf2d::viewport(self.pos * self.rect_size)
-                sdf.circle(
-                    self.rect_size.x * 0.5,
-                    self.rect_size.y * 0.5,
-                    self.rect_size.x * 0.4
-                );
-                sdf.fill(mix(#4, #575, self.active));
-                circle_pie(
-                    sdf,
-                    self.rect_size.x * 0.5,
-                    self.rect_size.y * 0.5,
-                    self.rect_size.x * 0.4,
-                    self.progress
-                );
-                sdf.fill(mix(#4, #8f8, self.active));
-                return sdf.result;
-            }
-        }
-    }
-    
     PromptGroup = <RectView> {
         <DividerV> {}
         height: Fit,
@@ -604,44 +335,6 @@ live_design!{
         }
     }
     
-    VideoFrame = <Image dx:-22.8 dy:313.4 dw:400.0 dh:300.0> {
-        height: 160,
-        width: 90,
-        width_scale: 2.0,
-        fit: Biggest,
-        draw_bg: {
-            uniform image_size: vec2
-            uniform is_rgb: 0.0
-            
-            fn yuv_to_rgb(y: float, u: float, v: float) -> vec4 {
-                return vec4(
-                    y + 1.14075 * (v - 0.5),
-                    y - 0.3455 * (u - 0.5) - 0.7169 * (v - 0.5),
-                    y + 1.7790 * (u - 0.5),
-                    1.0
-                )
-            }
-                        
-            fn get_video_pixel(self, pos:vec2) -> vec4 {
-                let pix = self.pos * self.image_size;
-                                
-                // fetch pixel
-                let data = sample2d(self.image, pos).xyzw;
-                if self.is_rgb > 0.5 {
-                    return vec4(data.xyz, 1.0);
-                }
-                if mod (pix.x, 2.0)>1.0 {
-                    return yuv_to_rgb(data.x, data.y, data.w)
-                }
-                return yuv_to_rgb(data.z, data.y, data.w)
-            }
-                        
-            fn pixel(self) -> vec4 {
-                let c = self.get_video_pixel(self.pos);
-                return c;// mix(vec4(c.x, c.x,c.x, 1.0), c, 1.0-self.dial2)
-            }
-        }
-    }
     AppUI = <View> {
                             
         flow: Overlay,
@@ -658,7 +351,7 @@ live_design!{
             root = Splitter {
                 axis: Horizontal,
                 align: FromA(300.0),
-                a: image_library,
+                a: chat_record,
                 b: split1
             }
                                     
@@ -669,9 +362,9 @@ live_design!{
                 b: input_panel
             }
                                     
-            image_library = Tab {
+            chat_record = Tab {
                 name: ""
-                kind: ImageLibrary
+                kind:  ChatRecord
             }
                                     
             input_panel = Tab {
@@ -705,84 +398,6 @@ live_design!{
                 padding: 0.0
                 draw_bg: {color: (COLOR_PANEL_BG)}
                 <View> {
-                    height: Fit,
-                    width: Fill
-                    align: {x: 0.0, y: 0.5}
-                    padding: 5
-                    /*                                
-                    <BarLabel> {
-                        text: "Workflow"
-                    }*/
-                    
-                    settings_cfg = <SettingsSlider> {visible: false, input = {text: "Config", default: 4.0, min:1.0, max:8.0, step:0.01}}
-                    
-                    settings_steps = <SettingsSlider> {input = {text: "Steps", default: 4.0, min:1, max: 10, step:1}}
-                                                
-                    settings_denoise = <SettingsSlider> {visible: false, input = {text: "Denoise", default: 1.0, min:0.2, max:1.0, step:0.01}}
-                    
-                    settings_delay = <SettingsSlider> {input = {text: "Delay", default: 0., min:0., max:5.0, step:0.01}} 
-                    
-                    resolution = <DropDownFlat> { 
-                        width: Fit, 
-                        popup_menu_position: BelowInput 
-                    }
-                    <BarLabel> {
-                        text: "width:"
-                    }
-                    settings_width = <TextInput> {
-                        draw_text: {text_style: <TEXT_BOLD> {}}
-                        text: "1920",
-                        height: Fit,
-                        width: Fit,
-                        margin: {bottom: 0, left: 0}
-                    }
-                    <BarLabel> {
-                        text: "height:"
-                    }
-                    settings_height = <TextInput> {
-                        draw_text: {text_style: <TEXT_BOLD> {}}
-                        text: "1088",
-                        height: Fit,
-                        width: Fit,
-                        margin: {bottom: 0, left: 0}
-                    }
-                     
-                    //workflow_dropdown = <SdxlDropDown> {}
-                    random_check_box = <SdxlCheckBox> {
-                        text: "Random"
-                    }
-                                    
-                    render_check_box = <SdxlCheckBox> {
-                        text: "Render"
-                    }
-                    single_check_box = <SdxlCheckBox> {
-                        text: "Single"
-                    }
-                    trim_button = <BarButton> {
-                        text: "Trim"
-                    }
-                    clear_button = <BarButton> {
-                        text: "Clear"
-                    }
-                    <BarLabel> {
-                        text: "Seed:"
-                    }
-                    seed_input = <TextInput> {
-                        draw_text: {text_style: <TEXT_BOLD> {}}
-                        height: Fit,
-                        width: Fit,
-                        margin: {bottom: 0, left: 0}
-                    }
-                    
-                    <BarLabel> {
-                        text: "Progress:"
-                    }
-                    progress = <BarLabel> {
-                        text: "1/1"
-                    }
-                    <FillerH> {}
-                }
-                <View> {
                     <View>{
                         flow: Down
                         <RoundedView>{
@@ -795,7 +410,8 @@ live_design!{
                             align: {x:0.5},
                             padding: 2
                             width: Fill,
-                            height: Fill
+                            height: fill,
+                            // 显示对话历史
                             llm_chat = <PortalList>{  
                                 auto_tail:true,
                                 width: Fill,
@@ -827,12 +443,11 @@ live_design!{
                                 }
                             }
                         }
-                       
+                       // 对话输入框
                         chat = <TextInput> {
                             height: Fit,
                             width: Fill,
-                            margin: {top: 0.0, left: 0.0, bottom: 0.0, right: 0.0},
-                            margin: {bottom: 0}
+                            margin: {top: 0.0, left: 0.0, bottom: 0.0, right: 10.0},
                             empty_message: "Talk here"
                             draw_bg: {
                                 color: (COLOR_TEXT_INPUT)
@@ -858,51 +473,10 @@ live_design!{
                             }
                         }
                     }
-                    positive = <TextInput> {
-                        width: Fill,
-                        height: Fill,
-                        margin: {top: 0.0, left: 5.0, bottom: 0.0, right: 0.0},
-                        text: "Positive"
-                        draw_text: {
-                            text_style: <THEME_FONT_LABEL> {font_size: (TEXT_BIG)}
-                        }
-                        draw_bg: {
-                            color: (COLOR_TEXT_INPUT)
-                        }
-                    }
-                    last_sent = <TextInput> {
-                        is_read_only: true,
-                        width: Fill,
-                        height: Fill,
-                        margin: {top: 0.0, left: 5.0, bottom: 0.0, right: 0.0},
-                        text: "Positive"
-                        draw_text: {
-                            text_style: <THEME_FONT_LABEL> {font_size: (TEXT_BIG)}
-                        }
-                        draw_bg: {
-                            fn pixel(self)->vec4{
-                                return #4
-                            }
-                        }
-                    }
-                    
-                    <View>{
-                        visible: false,
-                        negative = <TextInput> {
-                            width: 200,
-                            height: Fill,
-                            margin: {top: 0.0, left: 5.0, bottom: 10.0, right: 10.0},
-                            draw_text: {text_style: <TEXT_MONO> {font_size: (TEXT_BIG)}}
-                            text: "text, watermark, cartoon"
-                            draw_bg: {
-                                color: (COLOR_TEXT_INPUT)
-                            }
-                        }
-                    }
                 }
             }
                                     
-            ImageLibrary = <RectView> {
+            ChatRecord = <RectView> {
                 draw_bg: {color: (COLOR_PANEL_BG)}
                 height: Fill,
                 width: Fill
@@ -996,40 +570,6 @@ live_design!{
                 fit: Smallest,
                 width: Fill,
                 height: Fill
-            }
-        }
-    }
-    
-    AppWindow = <View>{
-        
-        second_image = <RectView> {
-            draw_bg: {color: #0}
-            height: Fill,
-            width: Fill
-            flow: Overlay,
-            align: {x: 0.5, y: 0.5}
-            image1 = <ImageBlend> {
-                breathe: false,
-                fit: Smallest,
-                width: Fill,
-                height: Fill
-            }
-            prompt_frame = <View> {
-                width: Fill,
-                height: Fill
-                align: {y: 1.0}
-                padding: {left: 120, bottom: 40, right: 120}
-                prompt = <Label> {
-                    width: Fill,
-                    height: Fit
-                    draw_text: {
-                        wrap: Word
-                        text_style: <TEXT_BOLD> {font_size: 20}
-                                                                                                    
-                        color: #c
-                    },
-                    text: "HELLO WORLD"
-                }
             }
         }
     }
