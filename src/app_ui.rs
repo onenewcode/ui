@@ -381,7 +381,32 @@ live_design!{
                         }
                     }
                 }
+                <View> {
+                    height: Fill,
+                    width: Fill
+                    flow: Right,
+                    padding: {left: 10, right: 10, top: 10, bottom: 10},
+                    chat_record = <PortalList>{  
+                        auto_tail:true,
+                        width: Fill,
+                        height: Fill,
+                        margin: {top: 0},
+                        history = <TextInput> {
+                            width: Fill,
+                            height: Fill,
+                            margin: {top: 0.0, left: 20.0, bottom: 5.0, right: 0.0},
+                            text: "LLM Output"
+                            draw_text: {
+                                text_style: <TEXT_MONO> {font_size: (TEXT_BIG)}
+                            }
+                            draw_bg: {
+                                color: (#335)
+                            }
+                        }
+                    }
+                }
+                    
+                }
             }
         }
-    }            
-}
+}            

@@ -20,15 +20,20 @@ live_design!{
 }
 
 app_main!(App); 
+#[derive(Debug, Clone)]
 enum LLMMsg{
     AI,
     Human,
     Progress
 }
+type LlmChat=Vec<(LLMMsg, String)>;
 #[derive(Live, LiveHook)]
 pub struct App {
     #[live] ui: WidgetRef,
-    #[rust] llm_chat: Vec<(LLMMsg,String)>,
+    //当前的对话
+    #[rust] llm_chat: LlmChat,
+    // 对话历史记录
+    #[rust] chat_record: Vec<LlmChat>,
 }
 impl App {
     fn send_query_to_llm(&mut self, cx: &mut Cx) {
@@ -101,6 +106,12 @@ impl MatchEvent for App{
             self.ui.widget(id!(llm_chat)).redraw(cx);
             // self.send_query_to_llm(cx);
         }
+        // 按钮事件
+        if self.ui.button(id!(new_chat)).clicked(&actions){
+            self.chat_record.push(self.llm_chat.clone());
+            self.llm_chat.clear();
+            self.ui.widget(id!(chat_record)).redraw(cx);
+        }
     }
     fn handle_network_responses(&mut self, cx: &mut Cx, event:&NetworkResponsesEvent) {
         for event in event{
@@ -142,6 +153,8 @@ impl MatchEvent for App{
     // 绘制二维
     fn handle_draw_2d(&mut self, cx:&mut Cx2d){
         let llm_chat = self.ui.portal_list(id!(llm_chat));
+        let  chat_record=self.ui.portal_list(id!(chat_record));
+        // 该循环会一直执行直到没有更多的UI元素需要更新或绘制
         while let Some(next) = self.ui.draw(cx, &mut Scope::empty()).step() {
            if let Some(mut llm_chat) = llm_chat.has_widget(&next).borrow_mut() {
                 llm_chat.set_item_range(cx, 0, self.llm_chat.len());
@@ -159,6 +172,26 @@ impl MatchEvent for App{
                     item.set_text(msg);
                     item.draw_all(cx, &mut Scope::empty());
                 }
+            }
+            if let Some(mut chat_record) =chat_record.has_widget(&next).borrow_mut() {  
+                chat_record.set_item_range(cx, 0, self.chat_record.len());
+                while let Some(item_id) = chat_record.next_visible_item(cx) {
+                    if item_id >= self.chat_record.len(){
+                        continue
+                    }
+                    // 获取历史纪录的第一条信息
+                    let (is_llm, msg) = &self.chat_record[item_id][0];
+                    // 获取模板
+                    let template = match is_llm{
+                        LLMMsg::AI=>live_id!(AI),
+                        LLMMsg::Human=>live_id!(Human),
+                        LLMMsg::Progress=>live_id!(AI)
+                    };
+                    let item = llm_chat.item(cx, item_id, template);
+                    item.set_text(msg);
+                    item.draw_all(cx, &mut Scope::empty());
+                }
+                
             }
       }
     }
