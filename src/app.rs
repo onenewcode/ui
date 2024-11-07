@@ -1,4 +1,3 @@
-
 use makepad_micro_serde::DeJson;
 use makepad_widgets::*;
 
@@ -26,6 +25,7 @@ enum LLMMsg{
     Human,
     Progress
 }
+
 type LlmChat=Vec<(LLMMsg, String)>;
 #[derive(Live, LiveHook)]
 pub struct App {
@@ -107,7 +107,7 @@ impl MatchEvent for App{
             // self.send_query_to_llm(cx);
         }
         // 按钮事件
-        if self.ui.button(id!(new_chat)).clicked(&actions){
+        if self.ui.button(id!(new_chat)).clicked(&actions)&&!self.llm_chat.is_empty() {
             self.chat_record.push(self.llm_chat.clone());
             self.llm_chat.clear();
             self.ui.widget(id!(chat_record)).redraw(cx);
@@ -182,12 +182,8 @@ impl MatchEvent for App{
                     // 获取历史纪录的第一条信息
                     let (is_llm, msg) = &self.chat_record[item_id][0];
                     // 获取模板
-                    let template = match is_llm{
-                        LLMMsg::AI=>live_id!(AI),
-                        LLMMsg::Human=>live_id!(Human),
-                        LLMMsg::Progress=>live_id!(AI)
-                    };
-                    let item = llm_chat.item(cx, item_id, template);
+                    let template = live_id!(HiatoryLabel);
+                    let item = chat_record.item(cx, item_id, template);
                     item.set_text(msg);
                     item.draw_all(cx, &mut Scope::empty());
                 }

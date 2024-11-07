@@ -48,12 +48,12 @@ live_design!{
     COLOR_LABEL = #xFFF9
     COLOR_DOWN_0 = #x00000000
     COLOR_DOWN_1 = #x00000011
-    COLOR_DOWN_2 = #x00000022
+    COLOR_DOWN_2 = #00000022
     COLOR_DOWN_3 = #x00000044
     COLOR_DOWN_4 = #x00000066
     COLOR_DOWN_5 = #x000000AA
-    COLOR_DOWN_6 = #x000000CC
-    
+    COLOR_DOWN_6 = #x000000CC 
+    COLOR_White_1 = #FFFFFF
     COLOR_UP_0 = #xFFFFFF00
     COLOR_UP_1 = #xFFFFFF0A
     COLOR_UP_2 = #xFFFFFF10
@@ -62,154 +62,97 @@ live_design!{
     COLOR_UP_5 = #xFFFFFF66
     COLOR_UP_6 = #xFFFFFFCC
     COLOR_UP_FULL = #xFFFFFFFF
-    PromptGroup = <RectView> {
-        <DividerV> {}
-        height: Fit,
-        width: Fill,
-        margin: {bottom: 10, top: 0}
-        flow: Down,
-        spacing: 0,
-        padding: 0
+    HistoryDropDown = <DropDown dx:-924.5 dy:2947.3 dw:378.1 dh:54.0> {
+        width: Fit
+        padding: {top: 0.0, right: 0.0, bottom: 0.0, left: 0.0 }
+
+        draw_text: {
+            text_style: <H2_TEXT_REGULAR> {},
+            fn get_color(self) -> vec4 {
+                return mix(
+                    mix(
+                        mix(
+                            (#xFFF8),
+                            (#xFFF8),
+                            self.focus
+                        ),
+                        (#xFFFF),
+                        self.hover
+                    ),
+                    (#x000A),
+                    self.pressed
+                )
+            }
+        }
+
+        popup_menu: {
+            menu_item: {
+                indent_width: 10.0
+                width: Fill,
+                height: Fit
+                padding: {top: 0.0, right: 0.0, bottom: 0.0, left: 0.0 }
+
+                draw_bg: {
+                    color: #x48,
+                    color_selected: #x6
+                }
+            }
+        }
+
         draw_bg: {
-            instance hover: 0.0
-            instance down: 0.0
             fn pixel(self) -> vec4 {
                 let sdf = Sdf2d::viewport(self.pos * self.rect_size);
-                let body = mix(mix(#53, #5c, self.hover), #33, self.down);
-                sdf.fill_keep(body)
+                self.get_bg(sdf);
+                // triangle
+                let c = vec2(self.rect_size.x - 10.0, self.rect_size.y * 0.5)
+                let sz = 2.5;
+
+                sdf.move_to(c.x - sz, c.y - sz);
+                sdf.line_to(c.x + sz, c.y - sz);
+                sdf.line_to(c.x, c.y + sz * 0.75);
+                sdf.close_path();
+
+                sdf.fill(mix(#FFFA, #FFFF, self.hover));
+
+                return sdf.result
+            }
+
+            fn get_bg(self, inout sdf: Sdf2d) {
+                sdf.rect(
+                    0,
+                    0,
+                    self.rect_size.x,
+                    self.rect_size.y
+                )
+                sdf.fill((COLOR_UP_0))
+            }
+        }
+    }
+
+    IconButton = <Button dx:-923.1 dy:2743.6 dw:372.4 dh:47.3> {
+        draw_icon: {
+            svg_file: (ICO_SAVE),
+            fn get_color(self) -> vec4 {
+                return mix(
+                    mix(
+                        (COLOR_UP_5),
+                        (COLOR_UP_6),
+                        self.hover
+                    ),
+                    (COLOR_UP_4),
+                    self.pressed
+                )
+            }
+        }
+        icon_walk: {width: 7.5, height: Fit}
+        draw_bg: {
+            fn pixel(self) -> vec4 {
+                let sdf = Sdf2d::viewport(self.pos * self.rect_size);
                 return sdf.result
             }
         }
-        animator: {
-            hover = {
-                default: off,
-                off = {
-                    from: {all: Forward {duration: 0.5}}
-                    ease: OutExp
-                    apply: {
-                        draw_bg: {hover: 0.0}
-                        prompt = {draw_text: {hover: 0.0}}
-                    }
-                }
-                on = {
-                    ease: OutExp
-                    from: {
-                        all: Forward {duration: 0.2}
-                    }
-                    apply: {
-                        draw_bg: {hover: 1.0}
-                        prompt = {draw_text: {hover: 1.0}}
-                    }
-                }
-            }
-            down = {
-                default: off
-                off = {
-                    from: {all: Forward {duration: 0.5}}
-                    ease: OutExp
-                    apply: {
-                        draw_bg: {down: 0.0}
-                        prompt = {draw_text: {down: 0.0}}
-                    }
-                }
-                on = {
-                    ease: OutExp
-                    from: {
-                        all: Forward {duration: 0.2}
-                    }
-                    apply: {
-                        draw_bg: {down: 1.0}
-                        prompt = {draw_text: {down: 1.0}}
-                    }
-                }
-            }
-        }
-        prompt = <Label> {
-            width: Fill
-            draw_text: {
-                text_style: <TEXT_BOLD> {},
-                instance hover: 0.0
-                instance down: 0.0
-                fn get_color(self) -> vec4 {
-                    return mix(mix(#xFFFA, #xFFFF, self.hover), #xFFF8, self.down);
-                }
-                wrap: Word,
-            }
-            text: ""
-        }
-    }
-    
-    ImageTile = <View> {
-        width: Fill,
-        height: Fit
-        cursor: Hand
-        animator: {
-            hover = {
-                default: off,
-                off = {
-                    from: {all: Forward {duration: 0.5}}
-                    ease: OutExp
-                    apply: {
-                        img = {draw_bg: {hover: 0.0}}
-                    }
-                }
-                on = {
-                    ease: OutExp
-                    from: {
-                        all: Forward {duration: 0.3}
-                    }
-                    apply: {
-                        img = {draw_bg: {hover: 1.0}}
-                    }
-                }
-            }
-            down = {
-                default: off
-                off = {
-                    from: {all: Forward {duration: 0.5}}
-                    ease: OutExp
-                    apply: {
-                        img = {draw_bg: {down: 0.0}}
-                    }
-                }
-                on = {
-                    ease: OutExp
-                    from: {
-                        all: Forward {duration: 0.3}
-                    }
-                    apply: {
-                        img = {draw_bg: {down: 1.0}}
-                    }
-                }
-            }
-        }
-        
-        img = <Image> {
-            width: Fill,
-            height: Fill
-            min_width: 1920,
-            min_height: 1080,
-            fit: Horizontal,
-            draw_bg: {
-                instance hover: 0.0
-                instance down: 0.0
-                fn pixel(self) -> vec4 {
-                    let sdf = Sdf2d::viewport(self.pos * self.rect_size)
-                    sdf.box(1, 1, self.rect_size.x - 2, self.rect_size.y - 2, 4.0)
-                    let max_scale = vec2(0.92);
-                    let scale = mix(vec2(1.0), max_scale, self.hover);
-                    let pan = mix(vec2(0.0), (vec2(1.0) - max_scale) * 0.5, self.hover);
-                    let color = self.get_color_scale_pan(scale, pan) + mix(vec4(0.0), vec4(0.1), self.down);
-                    sdf.fill_keep(color);
-                    sdf.stroke(
-                        mix(mix(#x0000, #x0006, self.hover), #xfff2, self.down),
-                        1.0
-                    )
-                    
-                    return sdf.result
-                }
-            }
-        }
+        padding: 9.0
+        text: ""
     }
     
     AppUI = <View> {
@@ -358,7 +301,7 @@ live_design!{
                         margin: {bottom: 0}
                         empty_message: "Search"
                         draw_bg: {
-                            color: (COLOR_TEXT_INPUT)
+                            color: (COLOR_White_1)
                         }
                         draw_text: {
                             text_style: {font_size: (TEXT_BIG)}
@@ -391,22 +334,103 @@ live_design!{
                         width: Fill,
                         height: Fill,
                         margin: {top: 0},
-                        history = <TextInput> {
-                            width: Fill,
-                            height: Fill,
-                            margin: {top: 0.0, left: 20.0, bottom: 5.0, right: 0.0},
-                            text: "LLM Output"
-                            draw_text: {
-                                text_style: <TEXT_MONO> {font_size: (TEXT_BIG)}
+                        HiatoryLabel =<View> {
+                            label = <Label> {
+                                margin: {top: 1}
+                                draw_text: {
+                                    text_style: <H2_TEXT_BOLD> {},
+                                    color: (COLOR_White_1)
+                                }
+                                text: "replace me!"
+                                animator: {
+                                    hover = {
+                                        default: off
+                                        off = {
+                                            from: {all: Forward {duration: 0.1}}
+                                            apply: {
+                                                draw_check: {hover: 0.0}
+                                                draw_text: {
+                                                    text_style: <H2_TEXT_BOLD> {},
+                                                    color: (COLOR_UP_0)
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                
                             }
-                            draw_bg: {
-                                color: (#335)
+                            menu = <View> {
+                                filter_type = <HistoryDropDown> {
+                                    width: Fill
+            
+                                    labels: ["LowPass", "HighPass", "BandPass", "BandReject"]
+                                    values: [LowPass, HighPass, BandPass, BandReject]
+            
+                                    draw_text: {
+                                        text_style: <H2_TEXT_REGULAR> {},
+                                        fn get_color(self) -> vec4 {
+                                            return mix(
+                                                mix(
+                                                    mix(
+                                                        (#x0008),
+                                                        (#x0008),
+                                                        self.focus
+                                                    ),
+                                                    (#x000F),
+                                                    self.hover
+                                                ),
+                                                (#x000A),
+                                                self.pressed
+                                            )
+                                        }
+                                    }
+            
+                                    draw_bg: {
+                                        fn pixel(self) -> vec4 {
+                                            let sdf = Sdf2d::viewport(self.pos * self.rect_size);
+                                            self.get_bg(sdf);
+                                            // triangle
+                                            let c = vec2(self.rect_size.x - 10.0, self.rect_size.y * 0.5)
+                                            let sz = 2.5;
+            
+                                            sdf.move_to(c.x - sz, c.y - sz);
+                                            sdf.line_to(c.x + sz, c.y - sz);
+                                            sdf.line_to(c.x, c.y + sz * 0.75);
+                                            sdf.close_path();
+            
+                                            sdf.fill(mix(#000A, #000F, self.hover));
+            
+                                            return sdf.result
+                                        }
+            
+                                        fn get_bg(self, inout sdf: Sdf2d) {
+                                            sdf.rect(
+                                                0,
+                                                0,
+                                                self.rect_size.x,
+                                                self.rect_size.y
+                                            )
+                                            sdf.fill((COLOR_UP_0))
+                                        }
+                                    }
+            
+                                    popup_menu: {
+                                        menu_item: {
+                                            indent_width: 10.0
+                                            width: Fill,
+                                            height: Fit
+            
+                                            padding: {left: (SSPACING_4), top: (SSPACING_2), bottom: (SSPACING_2), right: (SSPACING_2)}
+                                        }
+                                    }
+            
+                                }
                             }
-                        }
+                        }            
                     }
                 }
                     
-                }
+            }
             }
         }
 }            
