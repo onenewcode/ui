@@ -10,8 +10,34 @@ impl LiveRegister for App {
     }
 }
 ```
+组合ui需要看theme_desktop_dark.rs
+
+自定义ui需要看synth_ironfish
 ## event
 event通过handle_event方法可以为每个部件绑定指定的事件。同时如果比较复杂需要等待事件可以查看MatchEvent中的事件，因为所有的事件应该是在其中定义，事件会根据绑定的事件自动触发。
+
+# 动画
+动画播放类型
+```rs
+pub enum Play {
+    #[pick {duration: 1.0}]
+    Forward {duration: f64}, // 前进
+    
+    Snap, //折叠
+    
+    #[live {duration: 1.0, end: 1.0}]
+    Reverse {duration: f64, end: f64}, // 反转
+    
+    #[live {duration: 1.0, end: 1.0}]
+    Loop {duration: f64, end: f64}, //循环
+    
+    #[live {duration: 1.0, end: 1.0}]
+    ReverseLoop {duration: f64, end: f64},   // 反转循环 
+    
+    #[live {duration: 1.0, end: 1.0}]
+    BounceLoop {duration: f64, end: f64}, // 弹跳循环
+}
+```
 
 ## 
 # 多端适配

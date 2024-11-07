@@ -283,15 +283,15 @@ live_design!{
                         width: Fit,
                         margin: {bottom: 0}
                         text: "New Chat"
-                        draw_bg: {color: (COLOR_BUTTON)}
-                        draw_text: {text_style: {font_size: (TEXT_BIG)}}
+                        draw_text: {
+                            text_style: {font_size: (TEXT_BIG)},
+                    }
                     }
                     search_button= <Button> {
                         height: Fit,
                         width: Fit,
                         margin: {bottom: 0}
                         text: "Search"
-                        draw_bg: {color: (COLOR_BUTTON)}
                         draw_text: {text_style: {font_size: (TEXT_BIG)}}
                     }
                     search = <TextInput> {
@@ -300,9 +300,6 @@ live_design!{
                         width: Fill,
                         margin: {bottom: 0}
                         empty_message: "Search"
-                        draw_bg: {
-                            color: (COLOR_White_1)
-                        }
                         draw_text: {
                             text_style: {font_size: (TEXT_BIG)}
                             fn get_color(self) -> vec4 {
@@ -339,25 +336,12 @@ live_design!{
                                 margin: {top: 1}
                                 draw_text: {
                                     text_style: <H2_TEXT_BOLD> {},
-                                    color: (COLOR_White_1)
-                                }
-                                text: "replace me!"
-                                animator: {
-                                    hover = {
-                                        default: off
-                                        off = {
-                                            from: {all: Forward {duration: 0.1}}
-                                            apply: {
-                                                draw_check: {hover: 0.0}
-                                                draw_text: {
-                                                    text_style: <H2_TEXT_BOLD> {},
-                                                    color: (COLOR_UP_0)
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                                
+                                    // fn get_color(self) -> vec4 {
+                                    //     return mix(mix(mix(#000000,#000000,self.focus),#000000,self.hover),000000,self.pressed)
+                                    // }
+
+                                },
+                                text: "replace me!"                   
                             }
                             menu = <View> {
                                 filter_type = <HistoryDropDown> {
