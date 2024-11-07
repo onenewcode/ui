@@ -25,22 +25,22 @@ live_design!{
     // 记得加载中文字体文件，否则中文会出现乱码
     H2_TEXT_BOLD = {
         font_size: (FONT_SIZE_H2),
-        font: {path: dep("crate://makepad-widgets/resources/IBMPlexSans-SemiBold.ttf")}
+        font: {path: dep("crate://self/resources/SourceHanSerifCN-Light.ttf")}
     }
     
     H2_TEXT_REGULAR = {
         font_size: (FONT_SIZE_H2),
-        font: {path: dep("crate://makepad-widgets/resources/IBMPlexSans-Text.ttf")}
+        font: {path: dep("crate://self/resources/SourceHanSerifCN-Light.ttf")}
     }
     
     TEXT_BOLD = {
         font_size: 10.0,
-        font: {path: dep("crate://makepad-widgets/resources/IBMPlexSans-SemiBold.ttf")}
+        font: {path: dep("crate://self/resources/SourceHanSerifCN-Light.ttf")}
     }
     
     TEXT_MONO = {
         font_size: 10.0,
-        font: {path: dep("crate://makepad-widgets/resources/LiberationMono-Regular.ttf")}
+        font: {path: dep("crate://self/resources/SourceHanSerifCN-Light.ttf")}
     }
     
     COLOR_PANEL_BG = (COLOR_DOWN_2)
