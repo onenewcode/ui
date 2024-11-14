@@ -1,0 +1,11 @@
+[package]
+name = "ui"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+makepad-widgets = { git = "https://github.com/makepad/makepad.git" }
+# sonic-rs = "0.3"
+serde  = { version = "1.0", features = ["rc", "derive"] }
+serde_json = "1.0"
+toml = "0.8.19"
