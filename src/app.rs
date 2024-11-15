@@ -1,7 +1,11 @@
 use makepad_widgets::*;
 use serde_json::json;
 
-use crate::{client::{LLMClient, Response}, config::Config, file::{file_shutdown, file_startup}};
+use crate::{
+    client::{LLMClient, Response},
+    config::Config,
+    file::{file_shutdown, file_startup},
+};
 const THINKING: &str = "...think...";
 live_design! {
     import makepad_widgets::base::*;
@@ -54,10 +58,12 @@ pub struct App {
     // 配置
     #[rust]
     client: LLMClient,
+    #[rust]
+    alter_chating_delay_timer: Timer,
 }
 impl App {
     // 构建请求模板
-    fn send_query_to_llm(&mut self, cx: &mut Cx,msg:&str) {
+    fn send_query_to_llm(&mut self, cx: &mut Cx, msg: &str) {
         let body = json!({
           "model": self.client.model.clone(),
           "messages": [
@@ -72,6 +78,10 @@ impl App {
     // TODO 检查是否处于对话中，现在采用非流式，直接检查最后一个按钮是否为
     fn check_chat_state(&self) -> bool {
         self.chat_state
+    }
+    // 设置时间延时为1s
+    fn alter_chating_delay(&mut self, cx:&mut Cx){
+        self.alter_chating_delay_timer = cx.start_timeout(1.0);
     }
 }
 impl LiveRegister for App {
@@ -95,8 +105,9 @@ impl MatchEvent for App {
         {
             let val = chat.text();
             if !val.is_empty() {
-                // TODO 检查是否处于对话中，目前没有做提示
                 if self.check_chat_state() == true {
+                    self.ui.tooltip(id!(alter_chating_msg)).show(cx);
+                    self.alter_chating_delay(cx);
                 } else {
                     chat.set_text_and_redraw(cx, "");
                     chat.set_cursor(0, 0);
@@ -113,6 +124,8 @@ impl MatchEvent for App {
         // 新建对话
         if self.ui.button(id!(new_chat)).clicked(&actions) && !self.llm_chat.is_empty() {
             if self.check_chat_state() == true {
+                self.ui.tooltip(id!(alter_chating_msg)).show(cx);
+                self.alter_chating_delay(cx);
             } else {
                 // TODO 目前id采用自增
                 self.chat_record.push((self.id, self.llm_chat.clone()));
@@ -127,11 +140,6 @@ impl MatchEvent for App {
 
         // 列表事件
         for (item_id, item) in chat_record_list.items_with_actions(&actions) {
-            // let rows = item.view_set(ids!(row1, row2));
-            // for (row_index, row) in rows.iter().enumerate() {
-            //     if let Some(fd) = row.finger_down(&actions) {
-            //     }
-            // }
             if item.as_view().button(id!(button)).clicked(&actions) {
                 if !self.llm_chat.is_empty() {
                     self.chat_record.push((self.id, self.llm_chat.clone()));
@@ -174,6 +182,11 @@ impl MatchEvent for App {
                     log!("{} {:?}", event.request_id, e)
                 }
             }
+        }
+    }
+    fn handle_timer(&mut self, cx: &mut Cx, e:&TimerEvent){
+        if self.alter_chating_delay_timer.is_timer(e).is_some(){
+            self.ui.tooltip(id!(alter_chating_msg)).hide(cx);
         }
     }
     // 绘制二维
@@ -223,6 +236,7 @@ impl MatchEvent for App {
             }
         }
     }
+    
 }
 impl AppMain for App {
     fn handle_event(&mut self, cx: &mut Cx, event: &Event) {

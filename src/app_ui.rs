@@ -126,8 +126,48 @@ live_design! {
     }
 
     AppUI = <View> {
+        alter_chating_msg= <TooltipBase> {
+            width: Fill,
+            height: Fill,
 
-        flow: Overlay,
+            flow: Overlay
+            align: {x: 0.0, y: 0.0}
+
+            draw_bg: {
+                fn pixel(self) -> vec4 {
+                    return vec4(0., 0., 0., 0.0)
+                }
+            }
+                content: <View> {
+                flow: Overlay
+                width: Fit
+                height: Fit
+
+                <RoundedView> {
+                    width: Fit,
+                    height: Fit,
+
+                    padding: 16,
+
+                    draw_bg: {
+                        color: #fff,
+                        border_width: 1.0,
+                        border_color: #D0D5DD,
+                        radius: 2.
+                    }
+
+                    tooltip_label = <Label> {
+                        text: "sending"
+                        width: 270,
+                        draw_text: {
+                            text_style: <THEME_FONT_REGULAR>{font_size: 9},
+                            text_wrap: Word,
+                            color: #000
+                        }
+                    }
+                }
+            }
+        }
 
 
         width: Fill,

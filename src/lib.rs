@@ -7,5 +7,5 @@ pub use makepad_widgets::makepad_platform;
 pub mod app;
 pub mod app_ui;
 pub mod client;
-pub mod file;
 pub mod config;
+pub mod file;

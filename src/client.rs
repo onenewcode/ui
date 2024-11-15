@@ -1,10 +1,10 @@
 use makepad_widgets::*;
 use serde::{Deserialize, Serialize};
-#[derive(Serialize, Deserialize, Debug,Default)]
-pub struct LLMClient{
-    url:String,
-    pub api_key:String,
-    pub model:String,
+#[derive(Serialize, Deserialize, Debug, Default)]
+pub struct LLMClient {
+    url: String,
+    pub api_key: String,
+    pub model: String,
 }
 impl LLMClient {
     pub fn send_msg(&self, cx: &mut Cx, body: &str) {

@@ -42,7 +42,16 @@ pub enum Play {
 ## 
 # 多端适配
 todo
-
+# 提示框效果
+## TooltipBase
+![alt text](./img/image.png)
+## ModalBase
+![alt text](img/{EDE7424B-9FFE-4BC1-94FE-2024232C682A}.png)
+##  PopupNotificationBase 
+![alt text](img/{9D990650-30A8-48CB-B30B-7620FA0E034D}.png) 
+## PopupMenu
+https://www.cnblogs.com/wolipengbo/p/3398603.html#:~:text=%E8%B0%83%E7%94%A8new%20PopupMenu%20%28Context%20context%2CView%20anchor%29%E5%88%9B%E5%BB%BA%E4%B8%8B%E6%8B%89%E8%8F%9C%E5%8D%95%EF%BC%8Canchor%E4%BB%A3%E8%A1%A8%E8%A6%81%E6%BF%80%E5%8F%91%E8%AF%A5%E5%BC%B9%E5%87%BA%E8%8F%9C%E5%8D%95%E7%9A%84%E7%BB%84%E4%BB%B6%E3%80%82,%E8%B0%83%E7%94%A8MenuInflater%E7%9A%84inflate%20%28%29%E6%96%B9%E6%B3%95%E5%B0%86%E8%8F%9C%E5%8D%95%E8%B5%84%E6%BA%90%E5%A1%AB%E5%85%85%E5%88%B0PopupMenu%E4%B8%AD%E3%80%82%20%E8%B0%83%E7%94%A8PopupMenu%E7%9A%84show%20%28%29%E6%96%B9%E6%B3%95%E6%98%BE%E7%A4%BA%E5%BC%B9%E5%87%BA%E5%BC%8F%E8%8F%9C%E5%8D%95%E3%80%82%20%E4%B8%8B%E9%9D%A2%E7%9A%84%E5%AE%9E%E4%BE%8B%E7%A4%BA%E8%8C%83%E4%BA%86%E4%BD%BF%E7%94%A8PopupMenu%E7%9A%84%E5%8A%9F%E8%83%BD%E5%92%8C%E7%94%A8%E6%B3%95%E3%80%82
+## 
 # 运行
 
 # 中文
@@ -60,3 +69,6 @@ todo
 - 添加对话中提示框
 - 美化对话ui框
 - 添加删除历史记录的功能
+
+# 问题
+没有自适应布局类似margin auto，有些时候难以解决布局问题。
