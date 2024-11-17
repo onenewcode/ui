@@ -7,7 +7,13 @@ live_design! {
 
     TEXT_BIG = 12.0
 
-    COLOR_UP_0 = #xFFFFFF00
+    COLOR_UP_0 = #FFFFFF00
+    COLOR_UP_1 = #FFFFFF0A
+    COLOR_UP_2 = #FFFFFF10
+    COLOR_UP_3 = #FFFFFF20
+    COLOR_UP_4 = #FFFFFF40
+    COLOR_UP_5 = #FFFFFF66
+    COLOR_UP_6 = #FFFFFFCC
     COLOR_DOWN_2 = #x00000022
     FONT_SIZE_H2 = 10.0
     // 记得加载中文字体文件，否则中文会出现乱码
