@@ -126,12 +126,16 @@ live_design! {
     }
 
     AppUI = <View> {
+        
+        flow: Overlay,
+        width: Fill,
+        height: Fill
         alter_chating_msg= <TooltipBase> {
             width: Fill,
             height: Fill,
 
             flow: Overlay
-            align: {x: 0.0, y: 0.0}
+            align: {x: 0.5, y: 0.5}
 
             draw_bg: {
                 fn pixel(self) -> vec4 {
@@ -169,9 +173,6 @@ live_design! {
             }
         }
 
-
-        width: Fill,
-        height: Fill
 
 
         dock = <Dock> {
