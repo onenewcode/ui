@@ -93,6 +93,7 @@ impl LiveRegister for App {
 impl MatchEvent for App {
     fn handle_startup(&mut self, _cx: &mut Cx) {
         file_startup();
+        self.client=Config::new("config.toml").llm_client;
     }
     fn handle_shutdown(&mut self, _cx: &mut Cx) {
         file_shutdown();
@@ -115,7 +116,7 @@ impl MatchEvent for App {
                     self.llm_chat.push((LLMMsg::Progress, THINKING.into()));
                     // 调用 redraw 方法，通知 Makepad 框架该组件需要重新绘制。
                     self.ui.widget(id!(llm_chat)).redraw(cx);
-                    // self.send_query_to_llm(cx,&val);
+                    self.send_query_to_llm(cx,&val);
                     self.chat_state = true;
                 }
             }
@@ -208,7 +209,7 @@ impl MatchEvent for App {
                         LLMMsg::Progress => live_id!(AI),
                     };
                     let item = llm_chat.item(cx, item_id, template);
-                    item.set_text(msg);
+                    item.widget(id!(text)).set_text(msg);
                     item.draw_all(cx, &mut Scope::empty());
                 }
             }

@@ -130,6 +130,7 @@ live_design! {
         padding: 9.0
         text: ""
     }
+    IconImage=<Image> { source: dep("crate://self/resources/img/ducky.png" ),width: 125, height: 250,}
 
     AppUI = <View> {
         
@@ -228,19 +229,26 @@ live_design! {
                                 height: Fill,
                                 margin: {top: 0},
 
-                                AI = <Markdown> {
-                                    width: Fill,
-                                    height: Fill,
+                                AI = <RoundedView> {
+                                    text=<Markdown>{
+
+                                    }
+                                    <IconImage>{
+                                        
+                                    }
                                 }
-                                Human = <TextInput> {
-                                    is_read_only: true,
-                                    width: Fill,
-                                    height: Fill,
-                                    margin: {top: 0.0, left: 5.0, bottom: 0.0, right: 0.0},
-                                    draw_bg: {
-                                        fn pixel(self)->vec4{
-                                            return 	#0000CD;
+                                Human = <RoundedView> {
+                                    <IconImage>{}
+                                    text=<TextInput>{
+                                        is_read_only: true,
+                                        width: Fill,
+                                        height: Fill,
+                                        margin: {top: 0.0, left: 5.0, bottom: 0.0, right: 0.0},
+                                        draw_bg: {
+                                            fn pixel(self)->vec4{
+                                                return 	#0000CD;
                                         }
+                                    }
                                     }
                                 }
 
