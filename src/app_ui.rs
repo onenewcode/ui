@@ -135,6 +135,7 @@ live_design! {
             height: Fill,
 
             flow: Overlay
+            // 提示框对齐位置
             align: {x: 0.5, y: 0.5}
 
             draw_bg: {
